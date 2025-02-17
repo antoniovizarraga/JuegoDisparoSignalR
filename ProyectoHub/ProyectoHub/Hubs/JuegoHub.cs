@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using MDL;
 
 namespace ProyectoHub.Hubs
 {
     public class JuegoHub : Hub
     {
-        public async Task SendMessage(string user, string message)
+        public async Task SendMessage(GameInfo juegoInfo)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            await Clients.All.SendAsync("ReceiveMessage", juegoInfo);
         }
     }
 }
