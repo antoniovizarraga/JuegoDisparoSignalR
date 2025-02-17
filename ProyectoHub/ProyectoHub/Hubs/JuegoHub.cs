@@ -2,7 +2,7 @@
 
 namespace ProyectoHub.Hubs
 {
-    public class JuegoHub
+    public class JuegoHub : Hub
     {
         public async Task SendMessage(string user, string message)
         {
