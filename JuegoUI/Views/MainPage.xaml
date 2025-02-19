@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="JuegoUI.MainPage">
+
+    <VerticalStackLayout
+        Padding="30,0"
+        Spacing="25"
+        VerticalOptions="Center"
+        >
+        <Border StrokeShape="RoundRectangle 10,10,10,10" MaximumWidthRequest="450" MinimumHeightRequest="60" Stroke="#ae47de" BackgroundColor="#ae47de">
+            <StackLayout VerticalOptions="Center">
+                <Label Text="¡Bienvenido a DesenfundaMAUI!" HorizontalTextAlignment="Center" FontSize="Title" />
+            </StackLayout>
+        </Border>
+
+        <Image Source="vaqueros.jpg" HeightRequest="150" />
+
+        <Button Text="Jugar" FontSize="Medium" WidthRequest="150" />
+
+    </VerticalStackLayout>
+
+</ContentPage>

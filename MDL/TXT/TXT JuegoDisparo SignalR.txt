@@ -1,0 +1,45 @@
+﻿ENT/MDL:
+        GameInfo:
+* nombreJugador: String
+
+
+Hub:
+        JuegoHub:
+* static estadoJuego: GameInfo
+* static primeroEnLlegar: Boolean
+* static GameInfo elegirGanador()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+VM:
+        MauiVM:
+* nombreGanador: GameInfo
+
+
+* nombreJ1: String
+* nombreJ2: String
+* fraseJuego: String
+* void desenfundarArma()         // Se encargará de cambiar la frase juego en un
+                                // tiempo aleatorio para indicar cuándo hay que
+                                // disparar. En el set de fraseJuego activamos
+// los commands del botón para disparar.
+
+
+
+
+   * GameInfo disparar()                // Modifica la propiedad
