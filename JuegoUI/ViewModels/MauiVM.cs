@@ -69,12 +69,20 @@ namespace JuegoUI.ViewModels
 
         public MauiVM(GameInfo infoPartida)
         {
-
             // Inicializamos el comando con la acción y la validación (canExecute)
             disparoCommand = new DelegateCommand(DisparoCommand_Executed, DisparoCommand_CanExecute);
 
             infoJuego.NombreGanador = infoPartida.NombreGanador;
             InitializeHub();
+
+            PrepareGame(infoPartida);
+        }
+
+        private async void PrepareGame(GameInfo infoPartida)
+        {
+            await _hubConnection.SendAsync("ConnectPlayer", infoPartida);
+
+            StartGame();
         }
 
         // Método para iniciar el juego
@@ -86,16 +94,9 @@ namespace JuegoUI.ViewModels
             // Aquí es donde el cliente controla el flujo de la partida
             // Después de que los jugadores estén conectados y listos, se puede empezar el juego
 
-
+            
 
             await _hubConnection.SendAsync("SendWordToPlayers", "¡Disparen!");
-        }
-
-        // Evento cuando la página se carga y los jugadores se conectan
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            await StartGame(); // Inicia el juego cuando la página aparece
         }
 
         private async Task NotificarAsincrono()

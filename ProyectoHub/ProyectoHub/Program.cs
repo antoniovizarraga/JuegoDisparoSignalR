@@ -1,5 +1,6 @@
-using ProyectoHub.Client.Pages;
+using Microsoft.AspNetCore.ResponseCompression;
 using ProyectoHub.Components;
+using ProyectoHub.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
+builder.Services.AddSignalR();
+
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -25,5 +30,7 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(ProyectoHub.Client._Imports).Assembly);
+
+app.MapHub<JuegoHub>("/juegohub");
 
 app.Run();
