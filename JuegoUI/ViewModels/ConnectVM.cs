@@ -1,4 +1,6 @@
 ﻿using _18_CRUD_Personas_UWP_UI.ViewModels.Utilidades;
+using MDL;
+using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,11 +14,16 @@ namespace JuegoUI.ViewModels
     class ConnectVM : INotifyPropertyChanged
     {
 
+
         private string nombreJugador = "";
 
         private DelegateCommand connectCommand;
 
-        
+        private GameInfo partidaJugador = new GameInfo();
+
+
+
+
 
         public string NombreJugador
         {
@@ -41,12 +48,21 @@ namespace JuegoUI.ViewModels
 
         private async void cambioPagina()
         {
-            await Shell.Current.GoToAsync("//ShootPage");
+            var navigationParameter = new Dictionary<string, object>
+            {
+                { "Partida", partidaJugador }
+            };
+
+            await Shell.Current.GoToAsync("//ShootPage", navigationParameter);
         }
 
 
         private void ConnectCommand_Executed()
         {
+            partidaJugador.NombreGanador = nombreJugador;
+
+
+
             cambioPagina();
         }
 

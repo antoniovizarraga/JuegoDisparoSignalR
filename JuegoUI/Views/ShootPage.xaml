@@ -2,7 +2,12 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="JuegoUI.Views.ShootPage"
-             Title="ShootPage">
+             Title="ShootPage"
+             xmlns:vm="clr-namespace:JuegoUI.ViewModels">
+
+    <ContentPage.BindingContext>
+        <vm:MauiVM />
+    </ContentPage.BindingContext>
     <VerticalStackLayout>
         <Label 
             Text="Welcome to .NET MAUI!"

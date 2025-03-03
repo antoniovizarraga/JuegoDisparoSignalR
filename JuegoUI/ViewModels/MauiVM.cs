@@ -3,13 +3,15 @@ using MDL;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace JuegoUI.ViewModels
 {
-    class MauiVM
+    class MauiVM : IQueryAttributable, INotifyPropertyChanged
     {
         private HubConnection _hubConnection;
         private GameInfo infoJuego;
@@ -33,7 +35,10 @@ namespace JuegoUI.ViewModels
         public GameInfo InfoJuego
         {
             get { return infoJuego; }
-            set { infoJuego.NombreGanador = value.NombreGanador; }
+            set {
+                infoJuego.NombreGanador = value.NombreGanador;
+                NotifyPropertyChanged("infoJuego");
+            }
         }
 
 
@@ -41,7 +46,7 @@ namespace JuegoUI.ViewModels
         // Configurar la conexión al Hub
         private void InitializeHub()
         {
-            _hubConnection = new HubConnectionBuilder().WithUrl("").Build();
+            _hubConnection = new HubConnectionBuilder().WithUrl("http://localhost:5073/juegohub").Build();
 
             // Recibir la palabra para mostrarla en la interfaz
             _hubConnection.On<string>("ReceiveWord", (word) =>
@@ -67,15 +72,14 @@ namespace JuegoUI.ViewModels
             _hubConnection.StartAsync();
         }
 
-        public MauiVM(GameInfo infoPartida)
+        public MauiVM()
         {
             // Inicializamos el comando con la acción y la validación (canExecute)
             disparoCommand = new DelegateCommand(DisparoCommand_Executed, DisparoCommand_CanExecute);
 
-            infoJuego.NombreGanador = infoPartida.NombreGanador;
             InitializeHub();
 
-            PrepareGame(infoPartida);
+            PrepareGame(infoJuego);
         }
 
         private async void PrepareGame(GameInfo infoPartida)
@@ -130,5 +134,25 @@ namespace JuegoUI.ViewModels
             return res;
 
         }
+
+
+
+        public void ApplyQueryAttributes(IDictionary<string, object> query)
+        {
+            infoJuego = query["Partida"] as GameInfo;
+        }
+
+        #region Notify
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+
+        {
+
+            PropertyChanged?.Invoke(this, new
+            PropertyChangedEventArgs(propertyName));
+
+        }
+        #endregion
     }
 }
