@@ -11,7 +11,7 @@
 
     <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="20"> 
         <Label Text="Introduzca su nombre:" />
-        <Entry Placeholder="Nombre" BindingContext="{Binding NombreJugador}" />
+        <Entry Placeholder="Nombre" Text="{Binding NombreJugador}" />
         <Button Text="Conectar" BackgroundColor="CadetBlue" FontSize="Medium" TextColor="Black" ImageSource="plug.png" Command="{Binding ConnectCommand}" />
     </VerticalStackLayout>
 </ContentPage>

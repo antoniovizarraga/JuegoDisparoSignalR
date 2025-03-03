@@ -1,24 +1,32 @@
 ﻿using _18_CRUD_Personas_UWP_UI.ViewModels.Utilidades;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace JuegoUI.ViewModels
 {
-    class ConnectVM
+    class ConnectVM : INotifyPropertyChanged
     {
 
         private string nombreJugador = "";
 
         private DelegateCommand connectCommand;
 
+        
 
         public string NombreJugador
         {
             get { return nombreJugador; }
-            set { nombreJugador = value; }
+            set
+            {
+                nombreJugador = value;
+                connectCommand.RaiseCanExecuteChanged();
+
+            }
         }
 
         public DelegateCommand ConnectCommand
@@ -55,5 +63,21 @@ namespace JuegoUI.ViewModels
 
             return res;
         }
+
+
+        #region Notify
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+
+        {
+
+            PropertyChanged?.Invoke(this, new
+            PropertyChangedEventArgs(propertyName));
+
+        }
+        #endregion
+
+
     }
 }
