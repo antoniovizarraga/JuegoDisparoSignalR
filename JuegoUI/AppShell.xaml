@@ -13,6 +13,7 @@
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
     <ShellContent Title="Game" ContentTemplate="{DataTemplate pages:GamePage}" Route="GamePage" />
+    <ShellContent Title="Shoot" ContentTemplate="{DataTemplate pages:GamePage}" Route="ShootPage" />
 
 
 </Shell>

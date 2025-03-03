@@ -2,11 +2,16 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="JuegoUI.Views.GamePage"
-             Title="GamePage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+             Title="GamePage"
+             xmlns:vm="clr-namespace:JuegoUI.ViewModels">
+
+    <ContentPage.BindingContext>
+        <vm:ConnectVM />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="20"> 
+        <Label Text="Introduzca su nombre:" />
+        <Entry Placeholder="Nombre" BindingContext="{Binding NombreJugador}" />
+        <Button Text="Conectar" BackgroundColor="CadetBlue" FontSize="Medium" TextColor="Black" ImageSource="plug.png" Command="{Binding ConnectCommand}" />
     </VerticalStackLayout>
 </ContentPage>

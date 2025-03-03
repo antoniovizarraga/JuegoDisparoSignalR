@@ -20,7 +20,7 @@
 
         <Image Source="vaqueros.jpg" HeightRequest="150" />
 
-        <Button Text="Jugar" FontSize="Medium" WidthRequest="150" Command="{Binding PlayCommand}" />
+        <Button Text="Jugar" FontSize="Medium" WidthRequest="150" Command="{Binding PlayCommand}" TextColor="Black" ImageSource="play.png" />
 
     </VerticalStackLayout>
 
