@@ -16,7 +16,7 @@ namespace JuegoUI.ViewModels
         private HubConnection _hubConnection;
         private GameInfo infoJuego;
         private string estadoPartida = "";
-        private string textoPartida = "";
+        private string textoPartida = "Esperando jugadores...";
         private string resultadoPartida = "";
         private bool hasShooted = false;
         private DateTime _startTime;
@@ -27,7 +27,7 @@ namespace JuegoUI.ViewModels
 
 
         // Comando que se ejecuta cuando se hace clic en el botón
-        public DelegateCommand CasillaCommand
+        public DelegateCommand DisparoCommand
         {
             get { return disparoCommand; }
         }
@@ -39,6 +39,12 @@ namespace JuegoUI.ViewModels
                 infoJuego.NombreGanador = value.NombreGanador;
                 NotifyPropertyChanged("infoJuego");
             }
+        }
+
+        public string TextoPartida
+        {
+            get { return textoPartida; }
+            set { textoPartida = value; NotifyPropertyChanged("textoPartida"); }
         }
 
 
@@ -76,32 +82,39 @@ namespace JuegoUI.ViewModels
         {
             // Inicializamos el comando con la acción y la validación (canExecute)
             disparoCommand = new DelegateCommand(DisparoCommand_Executed, DisparoCommand_CanExecute);
+        }
 
-            InitializeHub();
+        // Método para iniciar el juego
+        private async void empezarJuego(bool haEmpezado)
+        {
+            if (!haEmpezado)
+            {
+                // Mostrar el mensaje de que ambos jugadores están listos
+                estadoPartida = "Esperando al otro jugador...";
+            }
+            else
+            {
 
-            PrepareGame(infoJuego);
+                // Aquí es donde el cliente controla el flujo de la partida
+                // Después de que los jugadores estén conectados y listos, se puede empezar el juego
+
+
+
+                await _hubConnection.SendAsync("SendWordToPlayers", "¡Disparen!");
+            }
+
+
         }
 
         private async void PrepareGame(GameInfo infoPartida)
         {
-            await _hubConnection.SendAsync("ConnectPlayer", infoPartida);
-
-            StartGame();
-        }
-
-        // Método para iniciar el juego
-        private async void StartGame()
-        {
-            // Mostrar el mensaje de que ambos jugadores están listos
-            estadoPartida = "Esperando al otro jugador...";
-
-            // Aquí es donde el cliente controla el flujo de la partida
-            // Después de que los jugadores estén conectados y listos, se puede empezar el juego
+            await _hubConnection.InvokeAsync("ConnectPlayer", infoPartida);
+            _hubConnection.On<bool>("StartGame", empezarJuego);
 
             
-
-            await _hubConnection.SendAsync("SendWordToPlayers", "¡Disparen!");
         }
+
+       
 
         private async Task NotificarAsincrono()
         {
@@ -139,7 +152,14 @@ namespace JuegoUI.ViewModels
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
+
             infoJuego = query["Partida"] as GameInfo;
+
+            InitializeHub();
+
+            PrepareGame(infoJuego);
+
+
         }
 
         #region Notify

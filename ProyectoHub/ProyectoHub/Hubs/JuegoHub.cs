@@ -9,7 +9,7 @@ namespace ProyectoHub.Hubs
 
         private static bool isFirst;
 
-        private static bool hayDosJugadores;
+        private static bool hayDosJugadores = false;
 
         private static Dictionary<string, GameInfo> jugadores = new();
 
@@ -23,19 +23,14 @@ namespace ProyectoHub.Hubs
 
         public async Task ConnectPlayer(GameInfo infoJuego)
         {
+            jugadores[Context.ConnectionId] = infoJuego;
 
-
-            if(jugadores.Count < 2)
-            {
-                jugadores[Context.ConnectionId] = infoJuego;
-            } else
+            if (jugadores.Count >= 2)
             {
                 hayDosJugadores = true;
-
-
-                // Revisar esta línea de código
-                await Clients.All.SendAsync("StartGame", hayDosJugadores);
             }
+            // Revisar esta línea de código
+            await Clients.All.SendAsync("StartGame", hayDosJugadores);
 
         }
 
