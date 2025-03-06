@@ -10,7 +10,7 @@
     </ContentPage.BindingContext>
     <VerticalStackLayout>
         <Label 
-            Text="{Binding TextoPartida}"
+            Text="{Binding TextoPartida, Mode=TwoWay}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
     </VerticalStackLayout>

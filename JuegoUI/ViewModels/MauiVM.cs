@@ -44,7 +44,7 @@ namespace JuegoUI.ViewModels
         public string TextoPartida
         {
             get { return textoPartida; }
-            set { textoPartida = value; NotifyPropertyChanged("textoPartida"); }
+            set { textoPartida = value; }
         }
 
 
@@ -61,6 +61,7 @@ namespace JuegoUI.ViewModels
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     textoPartida = word;
+                    NotifyPropertyChanged("TextoPartida");
                     _startTime = DateTime.Now;
                 });
             });
@@ -70,7 +71,7 @@ namespace JuegoUI.ViewModels
             {
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    resultadoPartida = $"{nombreGanador} ha ganado!";
+                    textoPartida = $"{nombreGanador} ha ganado!";
                 });
             });
 
@@ -85,12 +86,14 @@ namespace JuegoUI.ViewModels
         }
 
         // Método para iniciar el juego
-        private async void empezarJuego(bool haEmpezado)
+        private async void EmpezarJuego(bool haEmpezado)
         {
             if (!haEmpezado)
             {
                 // Mostrar el mensaje de que ambos jugadores están listos
-                estadoPartida = "Esperando al otro jugador...";
+                textoPartida = "Esperando al otro jugador...";
+                NotifyPropertyChanged("TextoPartida");
+
             }
             else
             {
@@ -108,8 +111,9 @@ namespace JuegoUI.ViewModels
 
         private async void PrepareGame(GameInfo infoPartida)
         {
+            _hubConnection.On<bool>("StartGame", EmpezarJuego);
             await _hubConnection.InvokeAsync("ConnectPlayer", infoPartida);
-            _hubConnection.On<bool>("StartGame", empezarJuego);
+            
 
             
         }
@@ -165,12 +169,11 @@ namespace JuegoUI.ViewModels
         #region Notify
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged(string propertyName = "")
 
         {
 
-            PropertyChanged?.Invoke(this, new
-            PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         }
         #endregion
