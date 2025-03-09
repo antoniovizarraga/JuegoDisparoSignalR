@@ -18,7 +18,8 @@ namespace JuegoUI.ViewModels
         private string estadoPartida = "";
         private string textoPartida = "Esperando jugadores...";
         private string resultadoPartida = "";
-        private bool hasShooted = false;
+        private bool hasShooted = true;
+        private bool alguienGano = false;
         private DateTime _startTime;
         private const int _timeLimit = 5000; // Tiempo para mostrar la palabra (en ms)
         private DelegateCommand disparoCommand;
@@ -47,6 +48,12 @@ namespace JuegoUI.ViewModels
             set { textoPartida = value; }
         }
 
+        public bool AlguienGano
+        {
+            get { return alguienGano; }
+            set { alguienGano = value; }
+        }
+
 
 
         // Configurar la conexión al Hub
@@ -62,7 +69,7 @@ namespace JuegoUI.ViewModels
                 {
                     textoPartida = word;
                     NotifyPropertyChanged("TextoPartida");
-                    _startTime = DateTime.Now;
+                    //_startTime = DateTime.Now;
                 });
             });
 
@@ -72,6 +79,9 @@ namespace JuegoUI.ViewModels
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     textoPartida = $"{nombreGanador} ha ganado!";
+                    alguienGano = true;
+                    NotifyPropertyChanged("TextoPartida");
+                    DisparoCommand.RaiseCanExecuteChanged();
                 });
             });
 
@@ -103,7 +113,16 @@ namespace JuegoUI.ViewModels
 
 
 
+
                 await _hubConnection.SendAsync("SendWordToPlayers", "¡Disparen!");
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    hasShooted = false;
+                    disparoCommand.RaiseCanExecuteChanged();
+                });
+
+
             }
 
 
@@ -127,21 +146,22 @@ namespace JuegoUI.ViewModels
 
         private void DisparoCommand_Executed()
         {
-            var reactionTime = DateTime.Now - _startTime;
 
-            // Enviar al servidor quien ha ganado
-            if (reactionTime.TotalMilliseconds < _timeLimit)
-            {
-                hasShooted = true;
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    hasShooted = true;
+                    disparoCommand.RaiseCanExecuteChanged();
+                });
+
+
                 NotificarAsincrono();
-            }
         }
 
         private bool DisparoCommand_CanExecute()
         {
             bool res = false;
 
-            if (!hasShooted)
+            if (!hasShooted && !alguienGano)
             {
 
 

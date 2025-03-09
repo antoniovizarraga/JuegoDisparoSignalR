@@ -7,7 +7,7 @@ namespace ProyectoHub.Hubs
     public class JuegoHub : Hub
     {
 
-        private static bool isFirst;
+        private static bool isFirst = false;
 
         private static bool hayDosJugadores = false;
 
@@ -41,7 +41,7 @@ namespace ProyectoHub.Hubs
             {
                 isFirst = true;
 
-                await Clients.All.SendAsync("GameOver", infoJuego);
+                await Clients.All.SendAsync("GameOver", infoJuego.NombreGanador);
             }
             
         }

@@ -13,5 +13,6 @@
             Text="{Binding TextoPartida, Mode=TwoWay}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        <Button Text="Disparar" WidthRequest="250" ImageSource="tank.png" Command="{Binding DisparoCommand}" />
     </VerticalStackLayout>
 </ContentPage>
