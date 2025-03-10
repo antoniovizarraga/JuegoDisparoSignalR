@@ -15,7 +15,7 @@ namespace JuegoUI.ViewModels
     {
         private HubConnection _hubConnection;
         private GameInfo infoJuego;
-        private string estadoPartida = "";
+        private string ganadorNombre = "";
         private string textoPartida = "Esperando jugadores...";
         private string resultadoPartida = "";
         private bool hasShooted = true;
@@ -78,15 +78,30 @@ namespace JuegoUI.ViewModels
             {
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    textoPartida = $"{nombreGanador} ha ganado!";
+                    textoPartida = $"¡{nombreGanador} ha ganado!";
                     alguienGano = true;
                     NotifyPropertyChanged("TextoPartida");
                     DisparoCommand.RaiseCanExecuteChanged();
+                    ganadorNombre = nombreGanador;
+                    mostrarAlerta();
+
                 });
             });
 
             // Iniciar la conexión
             _hubConnection.StartAsync();
+        }
+
+        private async void mostrarAlerta()
+        {
+            await Application.Current.MainPage.DisplayAlert("¡Ganó " + ganadorNombre + "!", ganadorNombre + "ganó la partida.", "OK");
+
+            await _hubConnection.InvokeAsync("DisconnectPlayer");
+            alguienGano = false;
+            hasShooted = true;
+
+            disparoCommand.RaiseCanExecuteChanged();
+            await Shell.Current.GoToAsync("//MainPage");
         }
 
         public MauiVM()

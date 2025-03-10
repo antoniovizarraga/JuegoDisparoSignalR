@@ -34,6 +34,12 @@ namespace ProyectoHub.Hubs
 
         }
 
+        public async Task DisconnectPlayer()
+        {
+            jugadores.Remove(Context.ConnectionId);
+
+        }
+
         // Notificar quién ha ganado
         public async Task NotifyWinner(GameInfo infoJuego)
         {
